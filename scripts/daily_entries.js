@@ -6,7 +6,7 @@ async function transferDailyEntriesData(inConnection,table) {
     let moreRecords = true;
         try {
             while(moreRecords) {
-                const data = await inConnection.query('SELECT * FROM dailyEntries LIMIT :limit OFFSET :offset', {
+                const data = await inConnection.query('SELECT * FROM dailyentry LIMIT :limit OFFSET :offset', {
                     replacements: { limit: batchSize, offset },
                     type: Sequelize.QueryTypes.SELECT
                 });
@@ -20,8 +20,8 @@ async function transferDailyEntriesData(inConnection,table) {
                         package_id: ele.package_id || ele.packageId,
                         driver_id: ele.driver_id || ele.driverId,
                         oldCount: ele.old_count || ele.oldCount,
-                        createdAt: ele.created_at || ele.createdAt,
-                        updatedAt: ele.updated_at || ele.updatedAt,
+                        createdAt: ele.created_at || ele.createdAt || ele.createdDate,
+                        updatedAt: ele.updated_at || ele.updatedAt || ele.createdDate
                       }
                 })
 
@@ -33,7 +33,7 @@ async function transferDailyEntriesData(inConnection,table) {
                 }
             }
 
-        console.log('Data transferred from inDatabase to outDatabase for dailyEntries table');
+        console.log(`Data transferred from inDatabase to outDatabase for dailyEntries table ----------> recordsCount : ${offset}`);
     } catch (err) {
         console.error('Error transferring data:', err);
     }

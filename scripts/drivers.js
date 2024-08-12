@@ -6,7 +6,7 @@ async function transferDriverData(inConnection,table) {
     let moreRecords = true;
         try {
             while(moreRecords) {
-                const data = await inConnection.query('SELECT * FROM drivers LIMIT :limit OFFSET :offset', {
+                const data = await inConnection.query('SELECT * FROM driver LIMIT :limit OFFSET :offset', {
                     replacements: { limit: batchSize, offset },
                     type: Sequelize.QueryTypes.SELECT
                 });
@@ -50,7 +50,7 @@ async function transferDriverData(inConnection,table) {
                 }
             }
 
-        console.log('Data transferred from inDatabase to outDatabase for drivers table');
+        console.log(`Data transferred from inDatabase to outDatabase for drivers table ----------> recordsCount : ${offset}`);
     } catch (err) {
         console.error('Error transferring data:', err);
     }

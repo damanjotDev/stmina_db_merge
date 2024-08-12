@@ -35,4 +35,25 @@ async function transferExpenseCategoriesData(inConnection,table) {
     }
 }
 
-module.exports = { transferExpenseCategoriesData }
+async function createExpenseCategoriesData(table, categoryName) {
+        try {
+            const data = await table.findOne({
+                where : { category: categoryName },
+                raw: true 
+            });
+        
+            if(data){
+                return { categoryId: data.id}
+            }
+            else{
+                const res = await table.create({category: categoryName})
+                console.log(`expense_categories createdc with name -------> ${categoryName}`);
+                return { categoryId: res.id };
+            }
+
+    } catch (err) {
+        console.error('Error transferring data:', err);
+    }
+}
+
+module.exports = { transferExpenseCategoriesData , createExpenseCategoriesData}

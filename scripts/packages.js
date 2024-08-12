@@ -6,7 +6,7 @@ async function transferPackageData(inConnection,table) {
     let moreRecords = true;
         try {
             while(moreRecords) {
-                const data = await inConnection.query('SELECT * FROM packages LIMIT :limit OFFSET :offset', {
+                const data = await inConnection.query('SELECT * FROM package LIMIT :limit OFFSET :offset', {
                     replacements: { limit: batchSize, offset },
                     type: Sequelize.QueryTypes.SELECT
                 });
@@ -37,7 +37,7 @@ async function transferPackageData(inConnection,table) {
                 }
             }
 
-        console.log('Data transferred from inDatabase to outDatabase for packages table');
+        console.log(`Data transferred from inDatabase to outDatabase for packages table ----------> recordsCount : ${offset}`);
     } catch (err) {
         console.error('Error transferring data:', err);
     }

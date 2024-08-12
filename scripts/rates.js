@@ -6,27 +6,29 @@ async function transferRateData(inConnection,table) {
     let moreRecords = true;
         try {
             while(moreRecords) {
-                const data = await inConnection.query('SELECT * FROM rates LIMIT :limit OFFSET :offset', {
+                const data = await inConnection.query('SELECT * FROM rate LIMIT :limit OFFSET :offset', {
                     replacements: { limit: batchSize, offset },
                     type: Sequelize.QueryTypes.SELECT
                 });
 
                 // console.log("14", data)
-                const new_data = data.map((ele)=>{
-                    return {
-                        id: ele.id || ele._id,
-                        effectiveDate: ele.effective_date || ele.effectiveDate,
-                        effectiveRate: ele.effective_rate || ele.effectiveRate,
-                        newStatus: ele.new_status || ele.newStatus,
-                        oldDate: ele.old_date || ele.oldDate || ele.olddate,
-                        oldRate: ele.old_rate || ele.oldRate || ele.oldrate,
-                        oldStatus: ele.old_status || ele.oldStatus,
-                        rateType: ele.rate_type || ele.rateType,
-                        driver_id: ele.driver_id || ele.driverId,
-                        package_id: ele.package_id || ele.packageId,
-                        createdAt: ele.created_at || ele.createdAt,
-                        updatedAt: ele.updated_at || ele.updatedAt
-                      }
+                const new_data = data.filter((ele)=>{
+                    if(ele.driver_id || ele.driverId){
+                        return {
+                            id: ele.id || ele._id,
+                            effectiveDate: ele.effective_date || ele.effectiveDate,
+                            effectiveRate: ele.effective_rate || ele.effectiveRate,
+                            newStatus: ele.new_status || ele.newStatus,
+                            oldDate: ele.old_date || ele.oldDate || ele.olddate,
+                            oldRate: ele.old_rate || ele.oldRate || ele.oldrate,
+                            oldStatus: ele.old_status || ele.oldStatus,
+                            rateType: ele.rate_type || ele.rateType,
+                            driver_id: ele.driver_id || ele.driverId,
+                            package_id: ele.package_id || ele.packageId,
+                            createdAt: ele.created_at || ele.createdAt,
+                            updatedAt: ele.updated_at || ele.updatedAt
+                          }
+                    }
                 })
 
                 if (data.length > 0) {
@@ -37,7 +39,7 @@ async function transferRateData(inConnection,table) {
                 }
             }
 
-        console.log('Data transferred from inDatabase to outDatabase for rates table');
+        console.log(`Data transferred from inDatabase to outDatabase for rates table ----------> recordsCount : ${offset}`);
     } catch (err) {
         console.error('Error transferring data:', err);
     }

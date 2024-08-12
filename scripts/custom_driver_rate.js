@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { Sequelize } = require('sequelize');
 
 async function transferCustomDriverRateData(inConnection,table) {
@@ -6,7 +7,7 @@ async function transferCustomDriverRateData(inConnection,table) {
     let moreRecords = true;
         try {
             while(moreRecords) {
-                const data = await inConnection.query('SELECT * FROM custom_driver_rates LIMIT :limit OFFSET :offset', {
+                const data = await inConnection.query('SELECT * FROM customdriverrate LIMIT :limit OFFSET :offset', {
                     replacements: { limit: batchSize, offset },
                     type: Sequelize.QueryTypes.SELECT
                 });
@@ -18,7 +19,7 @@ async function transferCustomDriverRateData(inConnection,table) {
                         package_id: ele.package_id || ele.packageId,
                         driver_id: ele.driver_id || ele.driverId,
                         customRate: ele.custom_rate || ele.customRate,
-                        effectiveDate: ele.effective_date || ele.effectiveDate,
+                        effectiveDate: ele.effectiveDate ? ele.effectiveDate :moment().utc().subtract(1, 'days').startOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
                         createdAt: ele.created_at || ele.createdAt,
                         updatedAt: ele.updated_at || ele.updatedAt,
                       }
@@ -32,7 +33,7 @@ async function transferCustomDriverRateData(inConnection,table) {
                 }
             }
 
-        console.log('Data transferred from inDatabase to outDatabase for custom_driver_rates table');
+        console.log(`Data transferred from inDatabase to outDatabase for custom_driver_rates table ----------> recordsCount : ${offset}`);
     } catch (err) {
         console.error('Error transferring data:', err);
     }
