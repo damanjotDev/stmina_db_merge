@@ -89,28 +89,29 @@ async function authenticate() {
         /**
          * Function to transfer data from  inDatabase to outDatabase for non relational tables
         */
-        await transferUserData(inConnection, models.user);
-        await transferPartnerData(inConnection, models.partnerModel)
-        await transferExpenseCategoriesData(inConnection, models.expenseCategoryModel)
+        // await transferUserData(inConnection, models.user);
+        // await transferPartnerData(inConnection, models.partnerModel)
+        // await transferExpenseCategoriesData(inConnection, models.expenseCategoryModel)
+        
         await transferDriverData(inConnection, models.drivers)
         await transferAreaData(inConnection, models.areas)
 
         /**
          * Function to transfer data from  inDatabase to outDatabase for relational tabels
          */
-        await transferRateData(inConnection, models.rateModel)
-        await transferPartnerInvoiceData(inConnection, models.partnerInvoiceModel)
         await transferPackageData(inConnection, models.packages)
-        await transferInvoiceData(inConnection, models.invoiceModel)
-        await transferforgotPasswordData(inConnection, models.forgotPasswordsModel)
-        await transferExpenseSalariesData(inConnection, models.expenseSalaryModel)
-        await transferExpenseData(inConnection, models.expenses)
-        await transferDriverDocumentsData(inConnection, models.driversDocument)
-        await transferDriverInOutData(inConnection, models.driverInOutModel)
-        await transferDriverInOutPauseData(inConnection, models.driverInOutPauseModel)
+        await transferRateData(inConnection, models.rateModel)
+        // await transferPartnerInvoiceData(inConnection, models.partnerInvoiceModel)
+        // await transferInvoiceData(inConnection, models.invoiceModel)
+        // await transferforgotPasswordData(inConnection, models.forgotPasswordsModel)
+        // await transferExpenseSalariesData(inConnection, models.expenseSalaryModel)
+        await transferExpenseData(inConnection, models.expenses, models.expenseCategoryModel)
+        // await transferDriverDocumentsData(inConnection, models.driversDocument)
+        // await transferDriverInOutData(inConnection, models.driverInOutModel)
+        // await transferDriverInOutPauseData(inConnection, models.driverInOutPauseModel)
         await transferDriverAreaData(inConnection, models.driverAreas)
         await transferDailyEntriesData(inConnection, models.dailyEntryModel)
-        await transferCustomDriverRateWeekendData(inConnection, models.customDriverRateWeekendsModel)
+        // await transferCustomDriverRateWeekendData(inConnection, models.customDriverRateWeekendsModel)
         await transferCustomDriverRateData(inConnection, models.customDriverRateModel)
     } catch (err) {
         console.error('Unable to connect to the database:', err);
